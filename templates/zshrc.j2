@@ -1,0 +1,62 @@
+### {{ ansible_managed }} - role: zsh
+## /etc/zsh/zshrc - ZSH SHELL CONFIG GLOBAL
+
+{% if 'Archlinux' in ansible_distribution %}
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/{{ default_user }}/.local/bin"
+{% elif 'Linuxmint' in ansible_distribution %}
+export PATH="$HOME/bin:$HOME/bin/pintos:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+{% else %}
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+{% endif %}
+export LANG=en_US.UTF-8
+setopt appendhistory autocd nomatch notify nohashdirs
+unsetopt beep extendedglob
+bindkey -v
+setopt HIST_IGNORE_DUPS
+
+HISTFILE=$HOME/.histfile
+HISTSIZE=10000
+SAVEHIST=10000
+
+export ZSHRC=/etc/zsh/zsh.d
+export ZSH=$ZSHRC/oh-my-zsh
+
+#DISABLE_AUTO_UPDATE="true"
+ZSH_THEME="bullet-train"
+source $ZSHRC/btconf.zsh
+
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+export TERMINFO=$HOME/.terminfo
+# zstyle :compinstall filename $HOME/.zshrc
+
+autoload -Uz compinit
+autoload -Uz promptinit
+compinit
+promptinit
+
+export TERM=xterm-256color
+export EDITOR=vim
+
+for file in $ZSHRC/*.zsh
+do
+    source $file
+done
+
+source $HOME/.aliases
+
+# Make sure the terminal is in application mode, when zle is active. Only then are the values from $terminfo valid.
+if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
+    function zle-line-init () {
+        printf '%s' ${terminfo[smkx]}
+    }
+    function zle-line-finish () {
+        printf '%s' ${terminfo[rmkx]}
+    }
+    zle -N zle-line-init
+    zle -N zle-line-finish
+fi
+if [[ -r /usr/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh ]]; then
+    source /usr/lib/python3.6/site-packages/powerline/bindings/zsh/powerline.zsh
+fi

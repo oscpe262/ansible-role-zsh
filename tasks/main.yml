@@ -1,0 +1,58 @@
+## roles/zsh/tasks/main.yml
+## Role main file
+# vim:ft=ansible:
+---
+- name: Install packages
+  package:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - zsh
+    - git
+  notify:
+    - Installscript for oh-my-zsh
+    - Run installer
+
+- name: set zsh as shell
+  user:
+    name: '{{ item.key }}'
+    shell: /bin/zsh
+    state: 'present'
+    createhome: no
+  with_dict: '{{ userlist }}'
+
+- meta: flush_handlers
+
+- name: prompt confs
+  template:
+    src: '{{ item.name }}.j2'
+    dest: '{{ item.dest }}/{{ item.name }}'
+  with_items:
+    - { name: 'spaceship.zsh-theme', dest: /etc/zsh/zsh.d/oh-my-zsh/themes }
+    - { name: 'aliases.zsh', dest: /etc/zsh/zsh.d/}
+    - { name: 'btconf.zsh', dest: /etc/zsh/zsh.d/}
+    - { name: 'keys.zsh', dest: /etc/zsh/zsh.d/}
+    - { name: 'lscolors.zsh', dest: /etc/zsh/zsh.d/}
+    - { name: 'scripts.zsh', dest: /etc/zsh/zsh.d/}
+    - { name: 'zshrc', dest: /etc/zsh/}
+  tags: zshconf
+
+- template:
+    src: '.Xresources.j2'
+    dest: '{{ item.value }}{{ item.key }}/.Xresources'
+  with_dict: '{{ userlist }}'
+  tags: xresources
+
+- copy:
+    src: bullet-train.zsh-theme
+    dest: /etc/zsh/zsh.d/oh-my-zsh/themes
+
+- name: .zshrc
+  template:
+    src: .zshrc.j2
+    dest: '{{ item.value }}{{ item.key }}/.zshrc'
+    owner: '{{ item.key }}'
+    group: '{{ item.key }}'
+  with_dict: '{{ userlist }}'
+  ignore_errors: yes
+...

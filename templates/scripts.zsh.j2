@@ -1,0 +1,156 @@
+### {{ ansible_managed }} - role: zsh
+## RANDOM SCRIPTS
+#emc() {
+#    if [ -z "$DISPLAY" ]; then
+#   	IS_GRAPHICAL=true
+#    else
+#      	IS_GRAPHICAL=$(emacs --batch -Q --eval='(if (fboundp '"'"'tool-bar-mode) (message "true") (message "false"))' 2>&1)
+#    fi
+#    if $IS_GRAPHICAL; then
+#      	emacsclient -a "" -nc "$@"
+#    else
+#    	emacsclient -a "" -t "$@"
+#    fi
+#}
+urar() {
+    rm $1/*.added
+    rm extlog
+    BASE="/LVM/Videos"
+exec <<EOF
+`find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part01.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part001.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*[A-Zaz].rar"`
+EOF
+while read rar; do
+    if [[ ${rar} = *Formula* ]]; then
+	DEST=/F1/2017/
+        mv `echo ${rar} | sed "s/\/$(basename ${rar})//"` ${DEST}
+	break
+    elif [[ ${rar} = *S[0-9][0-9]E* ]]; then
+	MOV=0
+	DEST=/TV/`echo $(basename $(dirname ${rar})) | sed 's/\.S[0-9][0-9]E.*//'`/
+    elif [[ ${rar} = *720* ]];then
+	MOV=HD
+	DEST=/Movies/720p/$(basename $(dirname ${rar}))/
+    elif [[ ${rar} = *1080* ]]; then
+	MOV=HD
+	DEST=/Movies/1080p/$(basename $(dirname ${rar}))/
+    else
+	MOV=SD
+	DEST=/Movies/SD/$(basename $(dirname ${rar}))/
+    fi
+    if [[ ${rar} = *Subs* ]]; then
+	# Assuming no subs for SD movies
+	if [[ ${MOV} != 0 ]]; then
+	    DEST=/Movies/${MOV}/$(basename $(dirname $(dirname ${rar})))/Subs/
+	else
+	    DEST=/TV/`echo $(basename $(dirname $(dirname ${rar}))) | sed 's/\.S[0-9][0-9]E.*//'`/
+	fi
+    fi
+    unrar e -o- ${rar} ${BASE}${DEST}
+    [[ $? == 0 ]] && echo -e "`tput setaf 2`Success:`tput sgr 0` ${rar}  to  ${BASE}${DEST}" >> extlog || echo -e "`tput setaf 1`Failed ($?):`tput sgr 0` ${rar} to ${BASE}${DEST}" >> extlog
+done
+tput clear
+cat extlog
+rm extlog
+}
+
+
+photosort() {
+    for f in *.jpg
+    do
+	mkdir $(identify -verbose $f | grep exif:DateTime: | cut -c20-29)
+	mv $f $(identify -verbose $f | grep exif:DateTime: | cut -c20-29)
+    done
+}
+
+remv() {
+    mkdir ../tmp
+    cp -ra $1 ../tmp/
+    rm -r $1
+    mv ../tmp/$1 .
+    rmdir ../tmp
+}
+
+splitflac() {
+    if [ -f "$1" ]; then
+	i=0
+	for cuefile in *.cue; do
+	    i=$(($i + 1))
+	done
+	if [ $i -eq 1 ]; then
+	    # precies 1 cuesheet gevonden
+	    if grep -q "INDEX 01 00:00:00" *.cue ; then
+		nice shntool split -t "%n %t" -f *.cue "$1"
+	    else
+		echo "The first track has a pre-gap. Shntool will cut that off and put it in a seperate file."
+		echo "You don't want that. Please modify the cuesheet from:"
+		grep -m1 "INDEX 00" *.cue
+		grep -m1 "INDEX 01" *.cue
+		echo "to:"
+		echo "    INDEX 01 00:00:00"
+		exit 1
+	    fi
+	elif [ $i -eq 0 ]; then
+	    echo "No cuesheet found in the current directory."
+	    exit 1
+	elif [ $i -gt 1 ]; then
+	    echo "$i cuesheets found in the current directory. Please remove the superfluous cuesheets."
+	    exit 1
+	fi
+    else
+	echo "Split image file (flac, ape, wav, etc.) according to cue-file."
+	echo "Output files are in FLAC."
+	echo "Usage: `basename $0` <image-file>"
+	exit 1
+    fi
+
+    echo
+    album=`grep -m 1 TITLE *.cue | cut -d\" -f2`
+    artist=`grep -m 1 PERFORMER *.cue | cut -d\" -f2`
+
+    for file in [0-9]*.wav; do
+	echo "Encoding $file"
+
+	if [[ ${file:0:1} == 0 ]] ; then
+	    tracknr=${file:1:1}
+	else
+	    tracknr=${file:0:2}
+	fi
+	title=`echo ${file:2} | sed -e "s/.wav$//"`
+
+	nice flac -s -T "artist=$artist" -T "album=$album" -T "title=$title" \
+	     -T "tracknumber=$tracknr" "$file" && rm "$file"
+    done
+}
+
+temp(){
+    test -e /sys/devices/platform/coretemp.0/hwmon/hwmon0/temp1_input
+    if [ $? -eq 0 ]
+    then
+	sed -i '/hwmon[0-9]/{s//hwmon0/;h};${x;/./{x;q0};x;q1}' /home/splatrat/.config/i3status.conf
+	print "\x1b[32;1mhwmon0 set\x1b[0m"
+    else
+	test -e /sys/devices/platform/coretemp.0/hwmon/hwmon1/temp1_input
+	if [ $? -eq 0 ]
+	then
+	    sed -i '/hwmon[0-9]/{s//hwmon1/;h};${x;/./{x;q0};x;q1}' /home/splatrat/.config/i3status.conf
+	    print "\x1b[32;1mhwmon1 set\x1b[0m"
+	else
+	    sed -i '/hwmon[0-9]/{s//hwmon2/;h};${x;/./{x;q0};x;q1}' /home/splatrat/.config/i3status.conf
+	    print "\x1b[32;1mhwmon2 set\x1b[0m"
+	fi
+    fi
+}
+
+scr(){
+    xrandr --output DVI-I-1 --auto --primary --output DVI-I-0 --auto &&
+    xrandr --output DVI-D-0 --mode 1920x1200 --pos 1920x0 --rotate normal --output HDMI-0 --off --output DVI-I-1 --mode 1920x1200 --pos 0x0 --rotate normal --output DVI-I-0 --off --output DP-1 --off --output DP-0 --off
+}
+
+xoff(){
+    xset dpms 0 0 0
+    xset -dpms
+    xset s 0 0
+    xset s noblank
+    xset s noexpose
+    xset s off
+}

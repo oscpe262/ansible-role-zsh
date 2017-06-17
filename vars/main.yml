@@ -1,0 +1,8 @@
+## roles/zsh/vars/main.yml
+# General variables associated with this role.
+# vim:ft=ansible:
+---
+userlist:
+  root: /
+  splatrat: /home/
+...
