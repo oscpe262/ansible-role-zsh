@@ -41,6 +41,7 @@
     src: '.Xresources.j2'
     dest: '{{ item.value }}{{ item.key }}/.Xresources'
   with_dict: '{{ userlist }}'
+  ignore_errors: True
   tags: xresources
 
 - copy:
