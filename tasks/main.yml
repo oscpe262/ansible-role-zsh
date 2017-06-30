@@ -57,7 +57,12 @@
   with_dict: '{{ userlist }}'
   ignore_errors: yes
 
-- name: "powershell colors"
+- name: powerline git
+  pip:
+    name: powerline-gitstatus
+    executable: pip3
+
+- name: "powerline colors"
   template:
     src: 'powerline/{{ item }}.j2'
     dest: '{{ pline_path }}/{{ item }}'
@@ -65,4 +70,5 @@
     - 'config_files/colors.json'
     - 'config_files/colorschemes/default.json'
     - 'config_files/colorschemes/shell/default.json'
+    - 'config_files/themes/shell/default.json'
 ...
