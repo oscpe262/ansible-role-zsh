@@ -2,6 +2,7 @@
 ## Role main file
 # vim:ft=ansible:
 ---
+### TODO: Make pip dist variable
 - name: Install packages
   package:
     name: '{{ item }}'
@@ -9,6 +10,7 @@
   with_items:
     - zsh
     - git
+    - python-pip
   notify:
     - Installscript for oh-my-zsh
     - Run installer
@@ -71,4 +73,5 @@
     - 'config_files/colorschemes/default.json'
     - 'config_files/colorschemes/shell/default.json'
     - 'config_files/themes/shell/default.json'
+    - 'config_files/themes/shell/__main__.json'
 ...
