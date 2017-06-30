@@ -2,6 +2,10 @@
 
 This file contains all notable changes to the Ansible role.
 
+## 1.1.0 - 2017-06-30
+
+Switch from oh-my-zsh to powerline as default prompt.
+
 ## 1.0.0 - 2017-06-17
 
 First release!

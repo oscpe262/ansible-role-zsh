@@ -10,7 +10,8 @@ An Ansible role for setting up zsh and oh-my-zsh. It will add the themes
 | :---                           | :---                             | :---             |
 | default_user | splatrat | zsh default user |
 | userlist | | list of users and their homedir root |
-
+| prompt_color | "b16:dylw" | defining color theme for prompt |
+| pline_path | /usr/lib/python3.6/site-packages/powerline/ | powerline directory |
 ## Dependencies
 No role dependencies. Should work with any distro for which the `package` module
 works and the package names for git/zsh are `git` and `zsh`. Feel free to hollar
