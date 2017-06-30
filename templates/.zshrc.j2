@@ -2,14 +2,15 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH=/etc/zsh/zsh.d/oh-my-zsh
+{#  export ZSH=/etc/zsh/zsh.d/oh-my-zsh
   export ZSHRC=/etc/zsh/zsh.d
-  source /etc/zsh/zshrc
+  #}
+source /etc/zsh/zshrc
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="bullet-train"
+#ZSH_THEME="bullet-train"
 {% if 'saiph' in ansible_hostname %}
 HOSTCOLOR="11"
 {% elif 'betelgeuse' in ansible_hostname %}
@@ -29,10 +30,12 @@ HOSTCOLOR="41"
 {% else %}
 HOSTCOLOR="red"
 {% endif %}
+{#
 SPACESHIP_PREFIX_HOST=" "
 SPACESHIP_PREFIX_DIR="@"
 SPACESHIP_PREFIX_GIT="  "
 SPACESHIP_PROMPT_TRUNC=0
+#}
 
 BULLETTRAIN_CONTEXT_BG="$HOSTCOLOR"
 BULLETTRAIN_DIR_BG="$BULLETTRAIN_CONTEXT_BG"
@@ -105,7 +108,7 @@ export LANG=en_US.UTF-8
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-{# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
@@ -114,3 +117,7 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #}
+
+if [[ -r {{ pline_path }}bindings/zsh/powerline.zsh ]]; then
+source {{ pline_path }}bindings/zsh/powerline.zsh
+fi

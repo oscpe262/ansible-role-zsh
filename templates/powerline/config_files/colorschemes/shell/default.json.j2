@@ -1,0 +1,16 @@
+{
+	"name": "Default color scheme for shell prompts",
+	"groups": {
+    "hostname":         { "fg": "b16:dblk", "bg": "{{ prompt_color }}", "attrs": ["bold"] },
+    "environment":      { "fg": "{{ prompt_color }}", "bg": "b16:dblk", "attrs": [] },
+		"mode":             { "fg": "b16:dgre", "bg": "b16:gre", "attrs": ["bold"] },
+		"attached_clients": { "fg": "b16:dblk", "bg": "b16:dgre", "attrs": [] }
+	},
+	"mode_translations": {
+		"vicmd": {
+			"groups": {
+				"mode": {"fg": "b16:dcya", "bg": "b16:whi", "attrs": ["bold"]}
+			}
+		}
+	}
+}

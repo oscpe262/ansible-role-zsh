@@ -56,4 +56,13 @@
     group: '{{ item.key }}'
   with_dict: '{{ userlist }}'
   ignore_errors: yes
+
+- name: "powershell colors"
+  template:
+    src: 'powerline/{{ item }}.j2'
+    dest: '{{ pline_path }}/{{ item }}'
+  with_items:
+    - 'config_files/colors.json'
+    - 'config_files/colorschemes/default.json'
+    - 'config_files/colorschemes/shell/default.json'
 ...

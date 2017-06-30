@@ -29,10 +29,10 @@ while read rar; do
 	DEST=/TV/`echo $(basename $(dirname ${rar})) | sed 's/\.S[0-9][0-9]E.*//'`/
     elif [[ ${rar} = *720* ]];then
 	MOV=HD
-	DEST=/Movies/720p/$(basename $(dirname ${rar}))/
+	DEST=/Movies/HD/$(basename $(dirname ${rar}))/
     elif [[ ${rar} = *1080* ]]; then
 	MOV=HD
-	DEST=/Movies/1080p/$(basename $(dirname ${rar}))/
+	DEST=/Movies/HD/$(basename $(dirname ${rar}))/
     else
 	MOV=SD
 	DEST=/Movies/SD/$(basename $(dirname ${rar}))/
