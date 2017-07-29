@@ -118,6 +118,9 @@ export LANG=en_US.UTF-8
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 #}
 
+{#
 if [[ -r {{ pline_path }}bindings/zsh/powerline.zsh ]]; then
 source {{ pline_path }}bindings/zsh/powerline.zsh
 fi
+#}
+source $(find /usr -name "powerline.zsh" 2> /dev/null)

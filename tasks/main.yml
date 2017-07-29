@@ -2,6 +2,11 @@
 ## Role main file
 # vim:ft=ansible:
 ---
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+    - "main.yml"
 ### TODO: Make pip dist variable
 - name: Install packages
   package:
@@ -10,7 +15,7 @@
   with_items:
     - zsh
     - git
-    - python-pip
+    - '{{ pip_package }}'
   notify:
     - Installscript for oh-my-zsh
     - Run installer
@@ -59,6 +64,11 @@
   with_dict: '{{ userlist }}'
   ignore_errors: yes
 
+- name: powerline status
+  pip:
+    name: powerline-status
+    executable: pip3
+
 - name: powerline git
   pip:
     name: powerline-gitstatus
@@ -67,7 +77,7 @@
 - name: "powerline colors"
   template:
     src: 'powerline/{{ item }}.j2'
-    dest: '{{ pline_path }}/{{ item }}'
+    dest: '{{ pline_path }}{{ item }}'
   with_items:
     - 'config_files/colors.json'
     - 'config_files/colorschemes/default.json'

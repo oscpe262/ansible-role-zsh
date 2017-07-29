@@ -2,6 +2,7 @@
 # General variables associated with this role.
 # vim:ft=ansible:
 ---
+pip_package: python-pip
 userlist:
   root: /
   splatrat: /home/
