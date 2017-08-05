@@ -55,6 +55,26 @@
     src: bullet-train.zsh-theme
     dest: /etc/zsh/zsh.d/oh-my-zsh/themes
 
+- name: exa install (non-Arch)
+  copy:
+    src: exa
+    dest: /usr/local/bin/exa
+    mode: 0755
+  when: "'Archlinux' not in ansible_distribution"
+
+- yaourt:
+    name: exa-git
+    state: present
+  become: yes
+  become_user: '{{ as_user }}'
+  when: "'Archlinux' in ansible_distribution"
+
+- name: libhttp-parser (debian-based distros)
+  package:
+    name: libhttp-parser2.1
+    state: present
+  when: "'Debian' in ansible_os_family"
+
 - name: .zshrc
   template:
     src: .zshrc.j2

@@ -11,10 +11,10 @@
     alias mkdir='mkdir -p -v'
     alias ping='ping -c 5'
     alias less='most'
-    alias ls='ls -hF --color=auto'
-    alias lr='ls -R'                    # recursive ls
-    alias ll='ls -alh'
-    alias la='ls -A'
+    alias ls='{{ ls }} -F'
+    alias lr='{{ ls }} -R'                    # recursive ls
+    alias ll='{{ ls }} -alhF'
+    alias la='{{ ls }} -aF'
     alias lm='la | less'
     alias mv='mv -v'
     alias rsync='rsync -vh --progress'

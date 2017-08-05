@@ -5,5 +5,6 @@
 default_user: splatrat
 prompt_color: "b16:dylw"
 pline_path: /usr/lib/python3.6/site-packages/powerline/
+ls: ls
 ...
 
