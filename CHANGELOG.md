@@ -2,7 +2,7 @@
 
 This file contains all notable changes to the Ansible role.
 
-## 1.2.0 - 2017-08-05
+## 1.2.0 - 2017-08-05 
 
 Added `exa` support. It will by default replace `ls` in Debian-based distros and Arch Linux.
 
