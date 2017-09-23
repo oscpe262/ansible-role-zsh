@@ -2,15 +2,15 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-{#  export ZSH=/etc/zsh/zsh.d/oh-my-zsh
+  export ZSH=/etc/zsh/zsh.d/oh-my-zsh
   export ZSHRC=/etc/zsh/zsh.d
-  #}
-source /etc/zsh/zshrc
+  source /etc/zsh/zshrc
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="bullet-train"
+{#
 {% if 'saiph' in ansible_hostname %}
 HOSTCOLOR="11"
 {% elif 'betelgeuse' in ansible_hostname %}
@@ -30,16 +30,16 @@ HOSTCOLOR="41"
 {% else %}
 HOSTCOLOR="red"
 {% endif %}
-{#
+
 SPACESHIP_PREFIX_HOST=" "
 SPACESHIP_PREFIX_DIR="@"
 SPACESHIP_PREFIX_GIT="  "
 SPACESHIP_PROMPT_TRUNC=0
-#}
 
 BULLETTRAIN_CONTEXT_BG="$HOSTCOLOR"
 BULLETTRAIN_DIR_BG="$BULLETTRAIN_CONTEXT_BG"
 BULLETTRAIN_CUSTOM_BG="$BULLETTRAIN_CONTEXT_BG"
+#}
 {# Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -74,7 +74,7 @@ DISABLE_AUTO_UPDATE="true"
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
- HIST_STAMPS="yyyy-mm-dd"
+HIST_STAMPS="yyyy-mm-dd"
 
 {# Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -84,16 +84,16 @@ DISABLE_AUTO_UPDATE="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+# plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
-source $ZSHRC/aliases.zsh
+# source $ZSH/oh-my-zsh.sh
+# source $ZSHRC/aliases.zsh
 {# User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
 #}
 # You may need to manually set your language environment
-export LANG=en_US.UTF-8
+# export LANG=en_US.UTF-8
 
 {# Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -123,4 +123,5 @@ if [[ -r {{ pline_path }}bindings/zsh/powerline.zsh ]]; then
 source {{ pline_path }}bindings/zsh/powerline.zsh
 fi
 #}
-source $(find /usr -name "powerline.zsh" 2> /dev/null)
+# source $(find /usr -name "powerline.zsh" 2> /dev/null)
+source {{ pline_path }}bindings/zsh/powerline.zsh

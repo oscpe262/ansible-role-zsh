@@ -23,12 +23,12 @@ export ZSH=$ZSHRC/oh-my-zsh
 
 #DISABLE_AUTO_UPDATE="true"
 #ZSH_THEME="bullet-train"
-source $ZSHRC/btconf.zsh
+#source $ZSHRC/btconf.zsh
 
-plugins=(git)
+#plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-export TERMINFO=$HOME/.terminfo
+#export TERMINFO=$HOME/.terminfo
 # zstyle :compinstall filename $HOME/.zshrc
 
 autoload -Uz compinit
@@ -59,6 +59,6 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     zle -N zle-line-init
     zle -N zle-line-finish
 fi
-if [[ -r {{ pline_path }}bindings/zsh/powerline.zsh ]]; then
-source {{ pline_path }}bindings/zsh/powerline.zsh
-fi
+# if [[ -r {{ pline_path }}bindings/zsh/powerline.zsh ]]; then
+# source {{ pline_path }}bindings/zsh/powerline.zsh
+# fi
