@@ -35,12 +35,7 @@
     src: '{{ item.name }}.j2'
     dest: '{{ item.dest }}/{{ item.name }}'
   with_items:
-    - { name: 'spaceship.zsh-theme', dest: /etc/zsh/zsh.d/oh-my-zsh/themes }
     - { name: 'aliases.zsh', dest: /etc/zsh/zsh.d/}
-    - { name: 'btconf.zsh', dest: /etc/zsh/zsh.d/}
-    - { name: 'keys.zsh', dest: /etc/zsh/zsh.d/}
-    - { name: 'lscolors.zsh', dest: /etc/zsh/zsh.d/}
-    - { name: 'scripts.zsh', dest: /etc/zsh/zsh.d/}
     - { name: 'zshrc', dest: /etc/zsh/}
   tags: zshconf
 
@@ -60,14 +55,14 @@
     src: exa
     dest: /usr/local/bin/exa
     mode: 0755
-  when: "'Archlinux' not in ansible_distribution"
+  when: "'Arch\ Linux' not in ansible_distribution"
 
 - yaourt:
     name: exa-git
     state: present
   become: yes
   become_user: '{{ as_user }}'
-  when: "'Archlinux' in ansible_distribution"
+  when: "'Arch Linux' in ansible_distribution"
 
 - name: libhttp-parser (debian-based distros)
   package:

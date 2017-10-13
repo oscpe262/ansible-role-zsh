@@ -6,40 +6,6 @@
   export ZSHRC=/etc/zsh/zsh.d
   source /etc/zsh/zshrc
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="bullet-train"
-{#
-{% if 'saiph' in ansible_hostname %}
-HOSTCOLOR="11"
-{% elif 'betelgeuse' in ansible_hostname %}
-HOSTCOLOR="10"
-{% elif 'alnilam' in ansible_hostname %}
-HOSTCOLOR="13"
-{% elif 'Archlinux' in ansible_distribution %}
-HOSTCOLOR="blue"
-{% elif 'Ubuntu' in ansible_distribution %}
-HOSTCOLOR="yellow"
-{% elif 'Fedora' in ansible_distribution %}
-HOSTCOLOR="magenta"
-{% elif 'CentOS' in ansible_distribution %}
-HOSTCOLOR="red"
-{% elif 'Linuxmint' in ansible_distribution %}
-HOSTCOLOR="41"
-{% else %}
-HOSTCOLOR="red"
-{% endif %}
-
-SPACESHIP_PREFIX_HOST=" "
-SPACESHIP_PREFIX_DIR="@"
-SPACESHIP_PREFIX_GIT="  "
-SPACESHIP_PROMPT_TRUNC=0
-
-BULLETTRAIN_CONTEXT_BG="$HOSTCOLOR"
-BULLETTRAIN_DIR_BG="$BULLETTRAIN_CONTEXT_BG"
-BULLETTRAIN_CUSTOM_BG="$BULLETTRAIN_CONTEXT_BG"
-#}
 {# Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
@@ -47,8 +13,6 @@ BULLETTRAIN_CUSTOM_BG="$BULLETTRAIN_CONTEXT_BG"
 # sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 #}
-# Uncomment the following line to disable bi-weekly auto-update checks.
-DISABLE_AUTO_UPDATE="true"
 
 {# Uncomment the following line to change how often to auto-update (in days).
 # export UPDATE_ZSH_DAYS=13
@@ -70,7 +34,6 @@ DISABLE_AUTO_UPDATE="true"
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 #}
-
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
@@ -79,7 +42,6 @@ HIST_STAMPS="yyyy-mm-dd"
 {# Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 #}
-
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
