@@ -57,7 +57,8 @@
     mode: 0755
   when: "'Arch\ Linux' not in ansible_distribution"
 
-- yaourt:
+- name: exa install (Arch Linux)
+  yaourt: 
     name: exa-git
     state: present
   become: yes
