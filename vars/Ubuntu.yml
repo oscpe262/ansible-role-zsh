@@ -1,5 +1,5 @@
 ---
 pip_package: python3-pip
-pline_path: /usr/local/lib/python3.5/dist-packages/powerline/
+pline_path: /usr/local/lib/python3.6/dist-packages/powerline/
 ls: exa
 ...

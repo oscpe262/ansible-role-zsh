@@ -42,6 +42,7 @@
     alias umount='sudo umount'
     alias chown='sudo chown'
     alias chmod='sudo chmod'
+    alias systemctl='sudo systemctl'
 
 {% if 'Arch' in ansible_distribution %}
   ## PACMAN ALIASES
@@ -76,7 +77,7 @@
 urar() {
     rm $1/*.added
     rm extlog
-    BASE="/LVM/Videos"
+    BASE="/zfs/Videos"
 exec <<EOF
 `find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part01.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part001.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*[A-Zaz].rar"`
 EOF
@@ -210,4 +211,12 @@ xoff(){
     xset s noblank
     xset s noexpose
     xset s off
+}
+
+dropconf () {
+  if [[ "$1" == "--rm" ]]; then
+    find ~/Dropbox -name '*conflicted copy*' -exec rm -v {} \;
+  else
+    find ~/Dropbox -name '*conflicted copy*'
+  fi
 }

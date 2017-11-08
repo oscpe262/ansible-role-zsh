@@ -1,0 +1,35 @@
+## roles/zsh/tasks/main.yml
+## Role main file
+# vim:ft=ansible:
+---
+- name: "Install exa dependencies on Centos"
+  package:
+    name: '{{ item }}'
+    state: present
+  with_items:
+    - rust
+    - libgit2
+    - cmake
+    - cargo
+    - zlib
+    - zlib-devel
+    - zlib-static
+
+- name: Is exa installed?
+  stat:
+    path: /usr/local/bin/exa
+  register: installed
+  ignore_errors: yes
+
+- name: "Clone exa repo"
+  git:
+    repo: 'https://github.com/ogham/exa.git'
+    dest: /tmp/exa
+    clone: yes
+  when: not installed.stat.exists
+
+- name: make install
+  make:
+    chdir: /tmp/exa
+    target: install
+...

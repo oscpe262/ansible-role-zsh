@@ -50,12 +50,9 @@
     src: bullet-train.zsh-theme
     dest: /etc/zsh/zsh.d/oh-my-zsh/themes
 
-- name: exa install (non-Arch)
-  copy:
-    src: exa
-    dest: /usr/local/bin/exa
-    mode: 0755
-  when: "'Arch\ Linux' not in ansible_distribution"
+- name: exa install (RedHat)
+  import_tasks: RedHat.yml
+  when: "'RedHat' in ansible_os_family"
 
 - name: exa install (Arch Linux)
   yaourt: 

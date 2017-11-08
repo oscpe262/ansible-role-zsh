@@ -4,6 +4,7 @@ An Ansible role for setting up zsh and oh-my-zsh. It will add the themes
  'spaceship' and 'bullet-train' (used) as well as some useful configs.
 
 ## Requirements
+The paths might have to be changed depending on release versions of packages, will look in to fixing it dynamically one of those days. For Ubuntu, current version supported by default is 17.10.
 
 ## Role Variables
 | Variable                       | Default                          | Comments (type)  |
