@@ -28,7 +28,7 @@
     clone: yes
   when: not installed.stat.exists
 
-- name: make install
+- name: make exa install
   make:
     chdir: /tmp/exa
     target: install
