@@ -2,7 +2,7 @@
 ## Role main file
 # vim:ft=ansible:
 ---
-- name: "Install exa dependencies on Centos"
+- name: "Install exa dependencies on RedHat family OS"
   package:
     name: '{{ item }}'
     state: present

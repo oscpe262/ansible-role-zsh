@@ -1,0 +1,4 @@
+---
+pip_package: python3-pip
+pline_path: /usr/local/lib/python3.6/site-packages/powerline/
+...
