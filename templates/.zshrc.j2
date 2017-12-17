@@ -87,3 +87,7 @@ fi
 #}
 # source $(find /usr -name "powerline.zsh" 2> /dev/null)
 source {{ pline_path }}bindings/zsh/powerline.zsh
+
+if [ -z "$TMUX" ]; then
+  tmux ; exit
+fi
