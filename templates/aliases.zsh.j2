@@ -109,7 +109,7 @@ while read rar; do
     fi
     unrar e -o- ${rar} ${BASE}${DEST}
     [[ $? == 0 ]] && echo -e "`tput setaf 2`Success:`tput sgr 0` ${rar}  to  ${BASE}${DEST}" >> extlog || echo -e "`tput setaf 1`Failed ($?):`tput sgr 0` ${rar} to ${BASE}${DEST}" >> extlog
-    chown -R $USER:users ${BASE}${DEST}
+    chown -R ${USER}:users ${BASE}${DEST}
 done
 tput clear
 cat extlog
@@ -219,4 +219,11 @@ dropconf () {
   else
     find ~/Dropbox -name '*conflicted copy*'
   fi
+}
+
+epubtomobi () {
+  for book in *.epub; do
+    echo "Converting $book"
+    ebook-convert "$book" "$(basename "$book" .epub).mobi"
+  done
 }
