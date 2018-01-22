@@ -86,8 +86,11 @@ source {{ pline_path }}bindings/zsh/powerline.zsh
 fi
 #}
 # source $(find /usr -name "powerline.zsh" 2> /dev/null)
+{% if 'RedHat' in ansible_os_family %}
+source /usr/share/powerline/zsh/powerline.zsh
+{% else %}
 source {{ pline_path }}bindings/zsh/powerline.zsh
-
+{% endif %}
 if [ -z "$TMUX" ]; then
   tmux ; exit
 fi

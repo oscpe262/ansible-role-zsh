@@ -89,12 +89,12 @@
 
 - name: "powerline colors"
   template:
-    src: 'powerline/{{ item }}.j2'
+    src: 'powerline/config_files/{{ item }}.j2'
     dest: '{{ pline_path }}{{ item }}'
   with_items:
-    - 'config_files/colors.json'
-    - 'config_files/colorschemes/default.json'
-    - 'config_files/colorschemes/shell/default.json'
-    - 'config_files/themes/shell/default.json'
-    - 'config_files/themes/shell/__main__.json'
+    - 'colors.json'
+    - 'colorschemes/default.json'
+    - 'colorschemes/shell/default.json'
+    - 'themes/shell/default.json'
+    - 'themes/shell/__main__.json'
 ...
