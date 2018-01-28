@@ -52,7 +52,13 @@
 
 - name: exa install (RedHat)
   import_tasks: RedHat.yml
-  when: "'RedHat' in ansible_os_family"
+  when: "'RedHat' in ansible_os_family and ls == 'exa' and 'Fedora' not in ansible_distribution"
+
+- name: exa install (Fedora)
+  dnf:
+    name: exa
+    state: present
+  when: "'Fedora' in ansible_distribution"
 
 - name: exa install (Arch Linux)
   yaourt: 
