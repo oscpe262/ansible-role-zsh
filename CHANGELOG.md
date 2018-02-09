@@ -2,6 +2,10 @@
 
 This file contains all notable changes to the Ansible role.
 
+## 1.3.0 - 2018-02-09
+
+Separated powerline and exa install into separate roles for modularity.
+
 ## 1.2.0 - 2017-08-05 
 
 Added `exa` support. It will by default replace `ls` in Debian-based distros and Arch Linux.

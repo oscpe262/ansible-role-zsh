@@ -57,25 +57,4 @@
     group: '{{ item.key }}'
   with_dict: '{{ userlist }}'
   ignore_errors: yes
-
-- name: powerline status
-  pip:
-    name: powerline-status
-    executable: pip3
-
-- name: powerline git
-  pip:
-    name: powerline-gitstatus
-    executable: pip3
-
-- name: "powerline colors"
-  template:
-    src: 'powerline/config_files/{{ item }}.j2'
-    dest: '{{ pline_path }}{{ item }}'
-  with_items:
-    - 'colors.json'
-    - 'colorschemes/default.json'
-    - 'colorschemes/shell/default.json'
-    - 'themes/shell/default.json'
-    - 'themes/shell/__main__.json'
 ...

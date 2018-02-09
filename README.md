@@ -2,25 +2,21 @@
 
 An Ansible role for setting up zsh and oh-my-zsh. It is primarly intended for use with powerline (see my separate repo).
 
-## Todo:
-- break out powerline to a separate role
-
 ## Requirements
-The paths might have to be changed depending on release versions of packages, will look in to fixing it dynamically one of those days. For Ubuntu, current version supported by default is 17.10.
+Since the revamp, only Fedora is currently supported and tested.
+Should work with any distro for which the `package` module
+works and the package names for git/zsh are `git` and `zsh`. Feel free to hollar
+if you run into exceptions here.
 
 ## Role Variables
 | Variable                       | Default                          | Comments (type)  |
 | :---                           | :---                             | :---             |
-| default_user | splatrat | zsh default user |
-| userlist | | list of users and their homedir root |
-| prompt_color | "b16:dylw" | defining color theme for prompt |
-| pline_path | /usr/lib/python3.6/site-packages/powerline/ | powerline directory |
-| ls | ls (exa for debian and arch) | the command ls should execute |
+| `userlist` | | list of users and their homedir root, **this is required to set in host/group vars or playbook (God forbid)** |
+| `ls` | ls (exa for debian and arch) | the command ls should execute |
 | roficolor | CC6666 | hexadecimal value for rofi main color
+
 ## Dependencies
-No role dependencies. Should work with any distro for which the `package` module
-works and the package names for git/zsh are `git` and `zsh`. Feel free to hollar
-if you run into exceptions here.
+No role dependencies. 
 
 ## Example Playbook
 ```Yaml
