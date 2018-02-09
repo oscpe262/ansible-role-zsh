@@ -7,7 +7,7 @@
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
     - "main.yml"
-### TODO: Make pip dist variable
+
 - name: Install packages
   package:
     name: '{{ item }}'
@@ -15,7 +15,6 @@
   with_items:
     - zsh
     - git
-    - '{{ pip_package }}'
   notify:
     - Installscript for oh-my-zsh
     - Run installer
@@ -49,30 +48,6 @@
 - copy:
     src: bullet-train.zsh-theme
     dest: /etc/zsh/zsh.d/oh-my-zsh/themes
-
-- name: exa install (RedHat)
-  import_tasks: RedHat.yml
-  when: "'RedHat' in ansible_os_family and ls == 'exa' and 'Fedora' not in ansible_distribution"
-
-- name: exa install (Fedora)
-  dnf:
-    name: exa
-    state: present
-  when: "'Fedora' in ansible_distribution"
-
-- name: exa install (Arch Linux)
-  yaourt: 
-    name: exa-git
-    state: present
-  become: yes
-  become_user: '{{ as_user }}'
-  when: "'Arch Linux' in ansible_distribution"
-
-- name: libhttp-parser (debian-based distros)
-  package:
-    name: libhttp-parser2.1
-    state: present
-  when: "'Debian' in ansible_os_family"
 
 - name: .zshrc
   template:

@@ -1,4 +1,3 @@
 ---
-pip_package: python3-pip
-pline_path: /etc/xdg/powerline/
+ls: exa
 ...
