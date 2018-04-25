@@ -35,7 +35,7 @@
     dest: '{{ item.dest }}/{{ item.name }}'
   with_items:
     - { name: 'aliases.zsh', dest: /etc/zsh/zsh.d/}
-    - { name: 'zshrc', dest: /etc/zsh/}
+    - { name: 'zshrc', dest: /etc/}
   tags: zshconf
 
 - template:

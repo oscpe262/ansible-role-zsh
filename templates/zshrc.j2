@@ -1,57 +1,52 @@
 ### {{ ansible_managed }} - role: zsh
-## /etc/zsh/zshrc - ZSH SHELL CONFIG GLOBAL
+## /etc/zshrc - ZSH SHELL CONFIG GLOBAL
+#
+# /etc/zshrc is sourced in interactive shells.  It
+# should contain commands to set up aliases, functions,
+# options, key bindings, etc.
+#
 
-{% if 'Arch Linux' in ansible_distribution %}
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/{{ default_user }}/.local/bin"
-{% elif 'Linuxmint' in ansible_distribution %}
-export PATH="$HOME/bin:$HOME/bin/pintos:$HOME/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
-{% else %}
-export PATH="/bin:/sbin:/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/sbin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
-{% endif %}
-export LANG=en_US.UTF-8
-setopt appendhistory autocd nomatch notify nohashdirs histignorealldups allexport
-unsetopt beep extendedglob
-bindkey -v
-setopt HIST_IGNORE_DUPS
+## shell functions
+#setenv() { export $1=$2 }  # csh compatibility
 
-HISTFILE=$HOME/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+# Set prompts
+PROMPT='[%n@%m]%~%# '    # default prompt
+#RPROMPT=' %~'     # prompt for right side of screen
 
-export ZSHRC=/etc/zsh/zsh.d
-export ZSH=$ZSHRC/oh-my-zsh
+# bindkey -v             # vi key bindings
+# bindkey -e             # emacs key bindings
+bindkey ' ' magic-space  # also do history expansion on space
 
-DISABLE_AUTO_UPDATE="true"
+# Provide pathmunge for /etc/profile.d scripts
+pathmunge()
+{
+    if ! echo $PATH | /bin/grep -qE "(^|:)$1($|:)" ; then
+        if [ "$2" = "after" ] ; then
+            PATH=$PATH:$1
+        else
+            PATH=$1:$PATH
+        fi
+    fi
+}
 
-source $ZSH/oh-my-zsh.sh
-#export TERMINFO=$HOME/.terminfo
-# zstyle :compinstall filename $HOME/.zshrc
+_src_etc_profile_d()
+{
+    #  Make the *.sh things happier, and have possible ~/.zshenv options like
+    # NOMATCH ignored.
+    emulate -L ksh
 
-autoload -Uz compinit
-autoload -Uz promptinit
-compinit
-promptinit
 
-export TERM=xterm-256color
-export EDITOR=vim
+    # from bashrc, with zsh fixes
+    if [[ ! -o login ]]; then # We're not a login shell
+        for i in /etc/profile.d/*.sh; do
+	    if [ -r "$i" ]; then
+	        . $i
+	    fi
+        done
+        unset i
+    fi
+}
+_src_etc_profile_d
 
-source $ZSHRC/aliases.zsh
-
-if [[ -f $HOME/.aliases ]]; then
-    source $HOME/.aliases
-fi
-
-# Make sure the terminal is in application mode, when zle is active. Only then are the values from $terminfo valid.
-if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
-    function zle-line-init () {
-        printf '%s' ${terminfo[smkx]}
-    }
-    function zle-line-finish () {
-        printf '%s' ${terminfo[rmkx]}
-    }
-    zle -N zle-line-init
-    zle -N zle-line-finish
-fi
-# if [[ -r {{ pline_path }}bindings/zsh/powerline.zsh ]]; then
-# source {{ pline_path }}bindings/zsh/powerline.zsh
-# fi
+unset -f pathmunge _src_etc_profile_d
+#source /usr/share/powerline/zsh/powerline.zsh
