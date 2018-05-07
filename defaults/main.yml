@@ -2,7 +2,7 @@
 # Default lower priority variables for the role
 # vim:ft=ansible:
 ---
-default_user: splatrat
+default_user: root
 ls: ls
 roficolor: CC6666
 ...
