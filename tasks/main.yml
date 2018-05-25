@@ -46,7 +46,7 @@
   tags: xresources
 
 - copy:
-    src: '{{item}}'.zsh-theme
+    src: '{{ item }}.zsh-theme'
     dest: /etc/zsh/zsh.d/oh-my-zsh/themes
   with_items:
     - bullet-train
