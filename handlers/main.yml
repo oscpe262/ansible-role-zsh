@@ -1,6 +1,6 @@
 ## roles/zsh/handlers/main.yml
 # Handlers for the role
-# vim:ft=ansible:
+# vim:ft=yaml.ansible:
 ---
 - name: Installscript for oh-my-zsh
   template:

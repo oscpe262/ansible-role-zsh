@@ -1,6 +1,6 @@
 ## roles/zsh/tasks/main.yml
 ## Role main file
-# vim:ft=ansible:
+# vim:ft=yaml.ansible:
 ---
 - include_vars: "{{ item }}"
   with_first_found:
