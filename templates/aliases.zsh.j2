@@ -72,48 +72,80 @@
 {% endif %}
 
 ## RANDOM SCRIPTS
-urar() {
-    rm $1/*.added
-    rm extlog
-    BASE="/zfs/Videos"
+{% if 'betelgeuse' in ansible_hostname %}
+BASE=""
+
+##################### 
+# Find rar files
 exec <<EOF
 `find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part01.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part001.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*[A-Zaz].rar"`
 EOF
-while read rar; do
-    if [[ ${rar} = *Formula* ]]; then
-	DEST=/F1/2017/
-        mv `echo ${rar} | sed "s/\/$(basename ${rar})//"` ${DEST}
-	break
-    elif [[ ${rar} = *S[0-9][0-9]E* ]]; then
-	MOV=0
-	DEST=/TV/`echo $(basename $(dirname ${rar})) | sed 's/\.S[0-9][0-9]E.*//'`/
-    elif [[ ${rar} = *720* ]];then
-	MOV=HD
-	DEST=/Movies/HD/$(basename $(dirname ${rar}))/
-    elif [[ ${rar} = *1080* ]]; then
-	MOV=HD
-	DEST=/Movies/HD/$(basename $(dirname ${rar}))/
-    else
-	MOV=SD
-	DEST=/Movies/SD/$(basename $(dirname ${rar}))/
-    fi
-    if [[ ${rar} = *Subs* ]]; then
-	# Assuming no subs for SD movies
-	if [[ ${MOV} != 0 ]]; then
-	    DEST=/Movies/${MOV}/$(basename $(dirname $(dirname ${rar})))/Subs/
-	else
-	    DEST=/TV/`echo $(basename $(dirname $(dirname ${rar}))) | sed 's/\.S[0-9][0-9]E.*//'`/
-	fi
-    fi
-    unrar e -o- ${rar} ${BASE}${DEST}
-    [[ $? == 0 ]] && echo -e "`tput setaf 2`Success:`tput sgr 0` ${rar}  to  ${BASE}${DEST}" >> extlog || echo -e "`tput setaf 1`Failed ($?):`tput sgr 0` ${rar} to ${BASE}${DEST}" >> extlog
-    chown -R ${USER}:users ${BASE}${DEST}
-done
-tput clear
-cat extlog
-rm extlog
-}
 
+while read rar; do
+  ########################################
+  # Default values
+
+  $DISK=md0
+
+  ########################################  
+  # Movie or TV show?
+  
+  if [[ ${rar} = *S[0-9][0-9]E* ]]; then
+    VID_TYPE=tv
+  else
+    VID_TYPE=mov
+  fi
+
+  ########################################
+  # Clean crap chars in file name
+  TITLE=`$(basename $(dirname ${rar})) | sed "s/['()]//g ; s/\ /./g"`
+
+  ########################################  
+  # Title path
+
+  if [[ $VID_TYPE = tv ]]; then
+    TITLE=`echo ${TITLE} | sed 's/\.S[0-9][0-9]E.*//'`
+  fi
+
+  ########################################  
+  # Is subtitle? If so, apply fugly hack (redo stuff)
+  
+  if [[ ${rar} = *Subs* ]]; then
+    if [[ $VID_TYPE = tv ]]; then
+      TITLE=`$(basename $(dirname $(dirname ${rar}))) | sed "s/['()]//g ; s/\ /./g ; s/\.S[0-9][0-9]E.*//"`/
+    else
+      TITLE=`$(basename $(dirname $(dirname ${rar})))/Subs/ | sed "s/['()]//g ; s/\ /./g"`
+    fi
+  fi
+
+  ########################################  
+  # Determine disk $DISK
+
+  EXISTS=false
+
+  if [[ -d ${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE} ]]; then
+    EXISTS=true
+  else
+    DISK=md1
+    [[ -d ${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE} ]] && EXISTS=true
+  if
+
+  if [[ ${EXISTS} = false ]]; then
+    [[ `\df md0 | awk 'NR==2 {print $4}'` -ge `\df md1 | awk 'NR==2 {print $4}'` ]] && DISK=md0
+  fi
+
+  ########################################  
+  # This part is arguably inefficient, but it opens up for future handy use
+
+  DEST=${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE}/
+
+  ########################################  
+  # Do the unrar magic!
+
+  unrar e -o- ${rar} ${DEST} && chown -R ${USER}:users ${DEST}
+
+done
+{% endif %}
 
 photosort() {
     for f in *.jpg

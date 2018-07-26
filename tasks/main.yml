@@ -27,7 +27,46 @@
     createhome: no
   with_dict: '{{ userlist }}'
 
-- meta: flush_handlers
+- name: set root shortcut
+  file:
+    src: /etc/zsh/zsh.d/oh-my-zsh
+    dest: /root/.oh-my-zsh
+    state: link
+    force: yes
+
+- name: Installscript for oh-my-zsh
+  template:
+    src: install.sh.j2
+    dest: '{{ item.value }}{{ item.key }}/install.sh'
+    mode: 0750
+    owner: '{{ item.key }}'
+  with_dict: '{{ userlist }}'
+
+- name: Run installer
+  become: yes
+  become_user: '{{ item.key }}'
+  shell: '{{ item.value }}{{ item.key }}/install.sh'
+  args:
+    executable: '/bin/bash'
+  with_dict: '{{ userlist }}'
+
+- name: Secure insecure directories (1/3)
+  file:
+    path: '{{ item.value}}{{ item.key }}/.oh-my-zsh'
+    mode: 0700
+  with_dict: '{{ userlist }}'
+
+- name: Secure insecure directories (2/3)
+  file:
+    path: '{{ item.value}}{{ item.key }}/.oh-my-zsh/plugins'
+    mode: 0700
+  with_dict: '{{ userlist }}'
+
+- name: Secure insecure directories (3/3)
+  file:
+    path: '{{ item.value}}{{ item.key }}/.oh-my-zsh/plugins/git'
+    mode: 0700
+  with_dict: '{{ userlist }}'
 
 - name: prompt confs
   template:
@@ -38,20 +77,32 @@
     - { name: 'zshrc', dest: /etc/}
   tags: zshconf
 
-- template:
+- name: .Xresources
+  template:
     src: '.Xresources.j2'
     dest: '{{ item.value }}{{ item.key }}/.Xresources'
   with_dict: '{{ userlist }}'
   ignore_errors: True
   tags: xresources
 
-- copy:
-    src: '{{ item }}.zsh-theme'
-    dest: /etc/zsh/zsh.d/oh-my-zsh/themes
-  with_items:
-    - bullet-train
-    - oscpe
-
+- name: zsh-themes (1/3)
+  copy:
+    src: 'bureau-mod.zsh-theme'
+    dest: '{{ item.value }}{{ item.key }}/.oh-my-zsh/themes'
+  with_dict: '{{ userlist }}'  
+  
+- name: zsh-themes (2/3)
+  copy:
+    src: 'bullet-train.zsh-theme'
+    dest: '{{ item.value }}{{ item.key }}/.oh-my-zsh/themes'
+  with_dict: '{{ userlist }}'  
+  
+- name: zsh-themes (3/3)
+  copy:
+    src: 'oscpe.zsh-theme'
+    dest: '{{ item.value }}{{ item.key }}/.oh-my-zsh/themes'
+  with_dict: '{{ userlist }}'  
+  
 - name: .zshrc
   template:
     src: .zshrc.j2

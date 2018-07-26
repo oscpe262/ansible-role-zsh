@@ -2,13 +2,5 @@
 # Handlers for the role
 # vim:ft=yaml.ansible:
 ---
-- name: Installscript for oh-my-zsh
-  template:
-    src: install.sh.j2
-    dest: /root/install.sh
-    mode: 0750
-
-- name: Run installer
-  shell: /root/install.sh
 ...
 
