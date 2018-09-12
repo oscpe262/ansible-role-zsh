@@ -3,7 +3,7 @@
   ## MODIFIED COMMANDS
 
     alias cd..='cd ..'
-    alias cp='cp -av'
+    alias cp='cp -avr'
     alias df='df -h'
     alias diff='colordiff'              # requires colordiff package
     alias dir='dir --color=auto'
@@ -73,78 +73,80 @@
 
 ## RANDOM SCRIPTS
 {% if 'betelgeuse' in ansible_hostname %}
-BASE=""
-
-##################### 
-# Find rar files
+urar() {
+  BASE=""
+  
+  ##################### 
+  # Find rar files
 exec <<EOF
 `find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part01.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*.part001.rar" && find $1 -mindepth 0 -maxdepth 5 -type f -iname "*[A-Zaz].rar"`
 EOF
-
-while read rar; do
-  ########################################
-  # Default values
-
-  $DISK=md0
-
-  ########################################  
-  # Movie or TV show?
   
-  if [[ ${rar} = *S[0-9][0-9]E* ]]; then
-    VID_TYPE=tv
-  else
-    VID_TYPE=mov
-  fi
-
-  ########################################
-  # Clean crap chars in file name
-  TITLE=`$(basename $(dirname ${rar})) | sed "s/['()]//g ; s/\ /./g"`
-
-  ########################################  
-  # Title path
-
-  if [[ $VID_TYPE = tv ]]; then
-    TITLE=`echo ${TITLE} | sed 's/\.S[0-9][0-9]E.*//'`
-  fi
-
-  ########################################  
-  # Is subtitle? If so, apply fugly hack (redo stuff)
+  while read rar; do
+    ########################################
+    # Default values
   
-  if [[ ${rar} = *Subs* ]]; then
-    if [[ $VID_TYPE = tv ]]; then
-      TITLE=`$(basename $(dirname $(dirname ${rar}))) | sed "s/['()]//g ; s/\ /./g ; s/\.S[0-9][0-9]E.*//"`/
+    DISK=md0
+  
+    ########################################  
+    # Movie or TV show?
+    
+    if [[ ${rar} = *S[0-9][0-9]E* ]]; then
+      VID_TYPE=tv
     else
-      TITLE=`$(basename $(dirname $(dirname ${rar})))/Subs/ | sed "s/['()]//g ; s/\ /./g"`
+      VID_TYPE=mov
     fi
-  fi
-
-  ########################################  
-  # Determine disk $DISK
-
-  EXISTS=false
-
-  if [[ -d ${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE} ]]; then
-    EXISTS=true
-  else
-    DISK=md1
-    [[ -d ${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE} ]] && EXISTS=true
-  if
-
-  if [[ ${EXISTS} = false ]]; then
-    [[ `\df md0 | awk 'NR==2 {print $4}'` -ge `\df md1 | awk 'NR==2 {print $4}'` ]] && DISK=md0
-  fi
-
-  ########################################  
-  # This part is arguably inefficient, but it opens up for future handy use
-
-  DEST=${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE}/
-
-  ########################################  
-  # Do the unrar magic!
-
-  unrar e -o- ${rar} ${DEST} && chown -R ${USER}:users ${DEST}
-
-done
+  
+    ########################################
+    # Clean crap chars in file name
+    TITLE=`basename $(dirname ${rar}) | sed "s/['()]//g ; s/\ /./g"`
+  
+    ########################################  
+    # Title path
+  
+    if [[ $VID_TYPE = tv ]]; then
+      TITLE=`echo ${TITLE} | sed 's/\.S[0-9][0-9]E.*//'`
+    fi
+  
+    ########################################  
+    # Is subtitle? If so, apply fugly hack (redo stuff)
+    
+    if [[ ${rar} = *Subs* ]]; then
+      if [[ $VID_TYPE = tv ]]; then
+        TITLE=`basename $(dirname $(dirname ${rar})) | sed "s/['()]//g ; s/\ /./g ; s/\.S[0-9][0-9]E.*//"`/
+      else
+        TITLE=`basename $(dirname $(dirname ${rar}))/Subs/ | sed "s/['()]//g ; s/\ /./g"`
+      fi
+    fi
+  
+    ########################################  
+    # Determine disk $DISK
+  
+    EXISTS=false
+  
+    if [[ -d ${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE} ]]; then
+      EXISTS=true
+    else
+      DISK=md1
+      [[ -d ${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE} ]] && EXISTS=true
+    fi
+  
+    if [[ ${EXISTS} = false ]]; then
+      [[ `\df md0 | awk 'NR==2 {print $4}'` -ge `\df md1 | awk 'NR==2 {print $4}'` ]] && DISK=md0
+    fi
+  
+    ########################################  
+    # This part is arguably inefficient, but it opens up for future handy use
+  
+    DEST=${BASE}/${DISK}/vids/${VID_TYPE}/${TITLE}/
+  
+    ########################################  
+    # Do the unrar magic!
+  
+    unrar e -o- ${rar} ${DEST} && chown -R ${USER}:users ${DEST}
+  
+  done
+}
 {% endif %}
 
 photosort() {

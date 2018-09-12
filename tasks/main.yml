@@ -68,14 +68,20 @@
     mode: 0700
   with_dict: '{{ userlist }}'
 
-- name: prompt confs
+- name: zshrc
   template:
     src: '{{ item.name }}.j2'
     dest: '{{ item.dest }}/{{ item.name }}'
   with_items:
-    - { name: 'aliases.zsh', dest: /etc/zsh/zsh.d/}
     - { name: 'zshrc', dest: /etc/}
   tags: zshconf
+
+- name: aliases
+  template:
+    src: aliases.zsh.j2
+    dest: '{{ item.value }}{{ item.key }}/.aliases'
+  with_dict: '{{ userlist }}'
+  tags: zshconf,aliases
 
 - name: .Xresources
   template:
