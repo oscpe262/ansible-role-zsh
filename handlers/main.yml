@@ -2,5 +2,20 @@
 # Handlers for the role
 # vim:ft=yaml.ansible:
 ---
+- name: Installscript for oh-my-zsh
+  template:
+    src: install.sh.j2
+    dest: '{{ item.value }}{{ item.key }}/install.sh'
+    mode: 0750
+    owner: '{{ item.key }}'
+  with_dict: '{{ userlist }}'
+  
+- name: Run installer
+  become: yes 
+  become_user: '{{ item.key }}'
+  shell: '{{ item.value }}{{ item.key }}/install.sh'
+  args:
+    executable: '/bin/bash'
+  with_dict: '{{ userlist }}'
 ...
 
