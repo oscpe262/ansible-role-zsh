@@ -12,7 +12,6 @@
   
 - name: Run installer
   become: yes 
-  become_user: '{{ item.key }}'
   shell: '{{ item.value }}{{ item.key }}/install.sh'
   args:
     executable: '/bin/bash'

@@ -77,7 +77,7 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 [ -f $HOME/.aliases ] && source $HOME/.aliases
-
+[ -f $HOME/recent ] && source $HOME/recent
 {#
 # User configuration
 
@@ -117,3 +117,4 @@ if [ -z "$TMUX" ]; then
 fi
 source {{ pline_path }}/zsh/powerline.zsh
 #}
+export TERM=xterm-256color
